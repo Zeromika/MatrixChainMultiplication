@@ -60,3 +60,6 @@ def generate_test(case, runtime):
         else:
             print str(MatrixChainOrder(arr, size))
         sleep(0.8)
+
+
+generate_test(case=case, runtime=runtime)
