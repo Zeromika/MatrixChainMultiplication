@@ -8,7 +8,8 @@ from datetime import datetime
 
 parser = argparse.ArgumentParser(description='Matrix Chain Multiplication Algorithm Test Script.')
 requiredNamed = parser.add_argument_group('required arguments')
-requiredNamed.add_argument('-c', '--numberofcases', type=int, help='Param = number of test cases to be generated...', required=True)
+requiredNamed.add_argument('-c', '--numberofcases', type=int, help='Param = number of test cases to be generated...',
+                           required=True)
 parser.add_argument('-t', '--time', help='Show run-time(s) in milliseconds for each test case.')
 
 args = parser.parse_args()
