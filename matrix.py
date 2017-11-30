@@ -11,12 +11,17 @@ requiredNamed = parser.add_argument_group('required arguments')
 requiredNamed.add_argument('-c', '--numberofcases', type=int, help='Param = number of test cases to be generated...',
                            required=True)
 parser.add_argument('-t', '--time', help='Show run-time(s) in milliseconds for each test case.')
-
+parser.add_argument('-r', '--recursive', help='Try to solve the problem by naive recursive algorithm.')
 args = parser.parse_args()
+
+caseParam = args.numberofcases
+runTimeParam = args.time
 
 
 def MatrixChainOrder(p, n):
+    y=1
     m = [[0 for x in range(n)] for x in range(n)]
+    s = [[0 for x in range(n)] for x in range(n)]
     for i in range(1, n):
         m[i][i] = 0
     for L in range(2, n):
@@ -27,11 +32,19 @@ def MatrixChainOrder(p, n):
                 q = m[i][k] + m[k + 1][j] + p[i - 1] * p[k] * p[j]
                 if q < m[i][j]:
                     m[i][j] = q
-    return m[1][n - 1]
+                    s[i][j] = k
+    return m[1][n - 1], s
+    # return {'res':m[1][n - 1], 'arr':s}
 
 
-case = args.c
-runtime = args.time
+def print_optimal_parens(s, i, j):
+    if i == j:
+        print "A" + str(i),
+    else:
+        print "(",
+        print_optimal_parens(s, i, s[i][j])
+        print_optimal_parens(s, s[i][j] + 1, j)
+        print ")",
 
 
 def generate_test(case, runtime):
@@ -54,13 +67,18 @@ def generate_test(case, runtime):
         print(Fore.LIGHTRED_EX + "Minimum number of multiplications is "),
         if runtime is not None:
             a = datetime.now()
-            print str(MatrixChainOrder(arr, size))
+            res, arr2 = MatrixChainOrder(arr, size)
+            print str(res)
             b = datetime.now()
+            print_optimal_parens(arr2, 1, size-1)
             c = b - a
-            print "Took : " + str(int(c.total_seconds() * 1000)) + "ms"
+            print "Took : " + str(long(c.total_seconds() * 10)) + "ms"
         else:
-            print str(MatrixChainOrder(arr, size))
+            res, arr2 = MatrixChainOrder(arr, size)
+            print str(res)
+            print_optimal_parens(arr2, 1, size-1)
+
         sleep(0.8)
 
 
-generate_test(case=case, runtime=runtime)
+generate_test(case=caseParam, runtime=runTimeParam)
